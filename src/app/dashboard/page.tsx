@@ -1,8 +1,8 @@
 // app/dashboard/page.js (or .ts for TypeScript)
 import { getServerSession } from "next-auth";
-import { authOptions } from "../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import Dashboard from "@/components/Dashboard";
+import { authOptions } from "../api/auth/[...nextauth]/auth";
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions);
