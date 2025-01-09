@@ -11,6 +11,7 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { toast } from "@/hooks/use-toast";
 import { useState } from "react";
+import Cookies from "js-cookie";
 import { Session } from "next-auth";
 import { signIn } from "next-auth/react";
 
@@ -67,7 +68,7 @@ export default function DialogCredentials({ session }: { session: Session }) {
       });
 
       // Save toast data in sessionStorage
-      sessionStorage.setItem(
+      Cookies.set(
         "toastMessage",
         JSON.stringify({
           title: "Credentials changed successfully",
