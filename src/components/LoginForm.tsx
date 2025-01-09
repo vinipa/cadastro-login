@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Checkbox } from "./ui/checkbox";
@@ -13,6 +13,16 @@ export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSignUp, setIsSignUp] = useState(false); // New state to toggle forms
+
+  // Retrieve the toast data
+  const toastMessage = sessionStorage.getItem("toastMessage");
+  if (toastMessage) {
+    const { title, description } = JSON.parse(toastMessage);
+    toast({ title, description });
+
+    // Clear the message so it doesn't show again
+    sessionStorage.removeItem("toastMessage");
+  }
 
   async function login(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -32,6 +42,14 @@ export default function LoginForm() {
           variant: "destructive",
         });
       } else {
+        // Save toast data in sessionStorage
+        sessionStorage.setItem(
+          "toastMessage",
+          JSON.stringify({
+            title: "Login successful",
+            description: "You can now use your dashboard!",
+          })
+        );
         window.location.href = "/dashboard";
       }
     } catch (err) {
@@ -87,7 +105,10 @@ export default function LoginForm() {
                 <Checkbox id="remember"></Checkbox>
                 <Label htmlFor="remember">Remember me</Label>
               </div>
-              <a href="#" className="text-accent-foreground text-sm">
+              <a
+                href="/resetPassword"
+                className="text-accent-foreground text-sm"
+              >
                 Forgot password?
               </a>
             </div>

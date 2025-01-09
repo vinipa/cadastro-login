@@ -8,10 +8,9 @@ export default async function DashboardPage() {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    redirect("/"); // Redirect if no session
+    redirect("/");
   }
 
-  // Pass session to Client Component
   return (
     <div className="min-h-screen">
       <Dashboard session={session} />
