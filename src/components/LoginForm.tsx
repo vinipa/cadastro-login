@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Checkbox } from "./ui/checkbox";
 import { Button } from "./ui/button";
 import { signIn } from "next-auth/react";
 import { toast } from "@/hooks/use-toast";
+import Cookies from "js-cookie";
 import SignUpForm from "./SignUpForm"; // Import SignUpForm
 
 export default function LoginForm() {
@@ -15,13 +16,16 @@ export default function LoginForm() {
   const [isSignUp, setIsSignUp] = useState(false); // New state to toggle forms
 
   // Retrieve the toast data
-  const toastMessage = sessionStorage.getItem("toastMessage");
+  const toastMessage = Cookies.get("toastMessage");
   if (toastMessage) {
-    const { title, description } = JSON.parse(toastMessage);
-    toast({ title, description });
-
-    // Clear the message so it doesn't show again
-    sessionStorage.removeItem("toastMessage");
+    try {
+      const { title, description } = JSON.parse(toastMessage);
+      toast({ title, description });
+      // Remove the cookie after showing the toast
+      Cookies.remove("toastMessage");
+    } catch (error) {
+      console.error("Error parsing toast message:", error);
+    }
   }
 
   async function login(e: React.FormEvent<HTMLFormElement>) {
@@ -43,7 +47,7 @@ export default function LoginForm() {
         });
       } else {
         // Save toast data in sessionStorage
-        sessionStorage.setItem(
+        Cookies.set(
           "toastMessage",
           JSON.stringify({
             title: "Login successful",

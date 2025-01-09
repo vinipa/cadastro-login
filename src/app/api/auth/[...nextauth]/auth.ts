@@ -22,8 +22,6 @@ export const authOptions: NextAuthOptions = {
           console.error("No credentials provided");
           return null;
         }
-        console.log("Received email:", credentials.email);
-        console.log("Received passss:", credentials.password);
 
         const user = await prisma.user.findUnique({
           where: { email: credentials.email },
@@ -32,8 +30,6 @@ export const authOptions: NextAuthOptions = {
           throw new Error("Invalid email or password");
         }
 
-        console.log("saiu tudoaa");
-        console.log(user, credentials?.password);
         if (user && credentials?.password) {
           const isValid = await bcrypt.compare(
             credentials.password,

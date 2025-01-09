@@ -5,18 +5,20 @@ import { Button } from "@/components/ui/button";
 import { Session } from "next-auth";
 import DialogCredentials from "./DialogCredentials";
 import { toast } from "@/hooks/use-toast";
+import Cookies from "js-cookie";
 
 export default function Dashboard({ session }: { session: Session }) {
-  // Retrieve the toast data
-  const toastMessage = sessionStorage.getItem("toastMessage");
+  const toastMessage = Cookies.get("toastMessage");
   if (toastMessage) {
-    const { title, description } = JSON.parse(toastMessage);
-    toast({ title, description });
-
-    // Clear the message so it doesn't show again
-    sessionStorage.removeItem("toastMessage");
+    try {
+      const { title, description } = JSON.parse(toastMessage);
+      toast({ title, description });
+      // Remove the cookie after showing the toast
+      Cookies.remove("toastMessage");
+    } catch (error) {
+      console.error("Error parsing toast message:", error);
+    }
   }
-
   return (
     <div className="flex min-h-screen flex-col items-center justify-center">
       <div className="max-w-2xl text-center">

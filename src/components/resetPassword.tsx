@@ -5,6 +5,7 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { toast } from "@/hooks/use-toast";
+import Cookies from "js-cookie";
 
 export default function ResetPassword() {
   const [email, setEmail] = useState("");
@@ -53,7 +54,7 @@ export default function ResetPassword() {
       console.log(data);
 
       // Save toast data in sessionStorage
-      sessionStorage.setItem(
+      Cookies.set(
         "toastMessage",
         JSON.stringify({
           title: "Password changed successfully",
